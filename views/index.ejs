@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title><%= title %></title>
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    <link rel="stylesheet" type="text/css" href="/bootstrap/dist/css/bootstrap.min.css">
+    <!-- <script type="text/javascript" src='/javascripts/voteajax.js'></script> -->
+  </head>
+  <body>
+    <div class="container">
+      <div class="row">
+        <h1 class="title"><%= title %><small>FOR 学习会</small></h1>
+        <div class="table-responsive">
+          <table class="table">
+            <caption>
+              <a href="/" class='btn btn-primary'>SHOW TIME</a>
+              <span id='alert' class="label label-danger"><%= info %></span>
+              <a class='pull-right btn btn-warning btn-sm' href="/admin">管理员登陆</a>
+            </caption>
+            <thead>
+              <tr>
+                <th class='text-center'>序号</th>
+                <th class='text-center'>主题</th>
+                <th class='text-center'>作者</th>
+                <th class='text-center'>平均分</th>
+                <th class='text-center'>状态</th>
+                <th class='text-center'>创建时间</th>
+                <th class='text-center'>评分</th>
+                <th class='text-center '>操作</th>
+              </tr>
+            </thead>
+            <tbody>
+            <% for(var i=0 ; i < messages.length; i++){ %>
+              <tr class='<%= (messages[i].status==1)?"":"danger" %>'>
+                <td class='text-center'><%= i+1 %></td>
+                <td class='text-center'><%= messages[i].title %></td>
+                <td class='text-center'><%= messages[i].author %></td>
+                <td class='text-center' width="18%">
+                  <div class="progress progress-striped active" style="margin-bottom:10px">
+                    <div class="progress-bar progress-bar-success" role="progressbar"
+                         aria-valuenow="60" aria-valuemin="0" aria-valuemax="100"
+                         style="width: <%= (messages[i].average/5)*100 %>%;">
+                      <small><%= messages[i].average %>分</small>
+                    </div>
+                  </div>
+                </td>
+                <td class='text-center'><%= (messages[i].status==1)?'投票中':'已关闭' %></td>
+                <td class='text-center'><%= messages[i].createTime %></td>
+                
+                <form action='/' method='POST'>
+                  <input type="hidden" name="titleId" value='<%= messages[i].Id %>'>
+                  <td class='text-center'>
+                    <input type="radio" name="voteOptions" id="optionsRadios3" value="1"> 1分
+                    <input type="radio" name="voteOptions" id="optionsRadios4"  value="2"> 2分
+                    <input type="radio" name="voteOptions" id="optionsRadios4"  value="3" checked> 3分
+                    <input type="radio" name="voteOptions" id="optionsRadios4"  value="4"> 4分
+                    <input type="radio" name="voteOptions" id="optionsRadios4"  value="5"> 5分
+                  </td>
+                  <td class='text-center'>
+                    <div class="btn-group btn-group-sm">
+                    <% if (messages[i].status == 1){ %>
+                      <button class='btn btn-danger' type="submit" name="submit">评分</button>
+                    <% } %>
+                      <a href="/show/<%= messages[i].Id %>" class="btn btn-success">查看</a>
+                    </div>
+                  </td>
+                </form>
+              </tr>
+            <% } %>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+  </body>
+</html>

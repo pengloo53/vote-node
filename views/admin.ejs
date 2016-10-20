@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title><%= title %></title>
+    <link rel='stylesheet' href='/stylesheets/style.css' />
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    <link rel="stylesheet" type="text/css" href="/bootstrap/dist/css/bootstrap.min.css">
+  </head>
+  <body>
+    <div class="container">
+      <div class="row">
+        <h1 class="title"><%= title %><small>所有评分主题</small></h1>
+        <div class="table-responsive">
+          <table class="table">
+            <caption>
+              <div class="btn-group">
+                <a href='/admin/add' class="btn btn-primary">新增评分主题</a>
+              </div>
+            </caption>
+            <thead>
+              <tr>
+                <th class='text-center'>序号</th>
+                <th class='text-center'>主题</th>
+                <th class='text-center'>作者</th>
+                <th class='text-center'>平均分</th>
+                <th class='text-center'>状态</th>
+                <th class='text-center'>创建时间</th>
+                <!-- <th class='text-center'>评分</th> -->
+                <th class='text-center'>操作</th>
+              </tr>
+            </thead>
+            <tbody>
+            <% for(var i=0 ; i < messages.length; i++){ %>
+              <tr class='<%= (messages[i].status==1)?"":"danger" %>'>
+                <td class='text-center'><%= i+1 %></td>
+                <td class='text-center'><%= messages[i].title %></td>
+                <td class='text-center'><%= messages[i].author %></td>
+                <td class='text-center'><%= messages[i].average %></td>
+                <td class='text-center'><%= (messages[i].status == 1)?"投票中":"已关闭" %></td>
+                <td class='text-center'><%= messages[i].createTime %></td>
+                
+                <form action='/admin/del' method='POST'>
+                  <input type="hidden" name="Id" value='<%= messages[i].Id %>'>
+<!--                   <td class='text-center'>
+                    <input type="radio" name="voteOptions" id="optionsRadios3" value="1"> 1分
+                    <input type="radio" name="voteOptions" id="optionsRadios4"  value="2"> 2分
+                    <input type="radio" name="voteOptions" id="optionsRadios4"  value="3"> 3分
+                    <input type="radio" name="voteOptions" id="optionsRadios4"  value="4"> 4分
+                    <input type="radio" name="voteOptions" id="optionsRadios4"  value="5" checked> 5分
+                  </td> -->
+                  <td class='text-center'>
+                    <div class="btn-group btn-group-sm">
+                      <a class='btn btn-success' type="button" href='/show/<%= messages[i].Id %>'>查看</a>
+                      <a class='btn btn-warning' type="button" href='/admin/edit?Id=<%= messages[i].Id %>'>更改</a>
+                      <button class='btn btn-danger' type="submit">删除</button>
+                    </div>
+                  </td>
+                </form>
+              </tr>
+            <% } %>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+  </body>
+</html>

@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title><%= title %></title>
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+  <link rel='stylesheet' href='/stylesheets/style.css' />
+  <link rel="stylesheet" type="text/css" href="/bootstrap/dist/css/bootstrap.min.css">
+</head>
+<body>
+  <div class="container">
+    <div class="row">
+      <h1><%= title %><small></small></h1>
+      <div class="col-lg-4">
+      <form role="form" action="/login" method="POST">
+        <div class="form-group">
+          <label for="title">用户名</label>
+          <input type="text" class="form-control" name='username' placeholder="请输入用户名">
+        </div>
+        <div class="form-group">
+          <label for="author">密码</label>
+          <input type="password" class="form-control" name='password' placeholder="请输入密码">
+        </div>
+        <button type="submit" class="btn btn-default">提交</button>
+        <span class="label label-danger" id="alert"><%= info %></span>
+      </form>
+      </div>
+    </div>
+  </div>
+</body>
+</html>

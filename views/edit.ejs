@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title><%= title %></title>
+  <link rel='stylesheet' href='/stylesheets/style.css' />
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+  <link rel="stylesheet" type="text/css" href="/bootstrap/dist/css/bootstrap.min.css">
+</head>
+<body>
+  <div class="container">
+    <div class="row">
+      <h1><%= title %><small></small></h1>
+      <div class="col-lg-4">
+      <form role="form" action="/admin/edit" method="POST">
+        <input type="hidden" name="Id" value="<%= message.Id %>">
+        <div class="form-group">
+          <label for="title">主题名称</label>
+          <input type="text" class="form-control" name='title' value="<%= message.title %>">
+        </div>
+        <div class="form-group">
+          <label for="author">作者</label>
+          <input type="text" class="form-control" name='author' value="<%= message.author %>">
+        </div>
+        <div class="form-group">
+          <label for="status">状态</label>
+          <select class="form-control" name="status">
+          <% if (message.status == 1){ %>
+            <option value=1 selected>打开评分</option>
+            <option value=2>关闭评分</option>
+          <% }else{ %>
+            <option value=1>打开评分</option>
+            <option value=2 selected>关闭评分</option>
+          <% } %>
+          </select>
+        </div>
+        <button type="submit" class="btn btn-default">提交</button>
+      </form>
+      </div>
+    </div>
+  </div>
+</body>
+</html>

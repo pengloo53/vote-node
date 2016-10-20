@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title><%= title %></title>
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+  <link rel='stylesheet' href='/stylesheets/style.css' />
+  <link rel="stylesheet" type="text/css" href="/bootstrap/dist/css/bootstrap.min.css">
+</head>
+<body>
+  <div class="container">
+    <div class="row">
+    <% if(votes[0]){ %>
+      <h1><%= title %>&nbsp<small><%= votes[0].author %>-《<%= votes[0].title %>》</small>&nbsp</h1>
+      <p class="lead pull-left"><em>共有&nbsp<span class="badge"><%= voteNum %></span>&nbsp条评分记录，平均分为&nbsp<span class="badge"><%= votes[0].average %></span>&nbsp。</em></p>
+    <% }else{ %>
+      <h1><%= title %></h1>
+      <p class="lead pull-left">没有评分记录</p>
+    <% } %>
+   
+
+<!-- 展示页面进行评分
+      <form action='/show' method='POST' class="pull-right">
+        <input type="radio" name="voteOptions" id="optionsRadios3" value="1" checked> 1分
+        <input type="radio" name="voteOptions" id="optionsRadios4"  value="2"> 2分
+        <input type="radio" name="voteOptions" id="optionsRadios4"  value="3"> 3分
+        <input type="radio" name="voteOptions" id="optionsRadios4"  value="4"> 4分
+        <input type="radio" name="voteOptions" id="optionsRadios4"  value="5"> 5分
+        <button class='btn btn-danger' type="submit" name="submit">评分</button>
+      </form>
+-->
+
+    </div>
+    <div class="row">
+      <div class="col-lg-8">
+        <div class="panel panel-primary">
+          <div class="panel-heading">
+            <h3 class="panel-title">评分详情</h3>
+          </div>
+          <div class="panel-body">
+            <table class="table pull-right">
+              <caption>
+                <span id='alert' class="label label-danger"></span>
+              </caption>
+              <thead>
+              <tr>
+                <th class='text-center'>序号</th>
+                <th class='text-center'>主题</th>
+                <!--<th class='text-center'>作者</th>-->
+                <th class='text-center'>评分</th>
+                <% if (isAdmin) {%>
+                  <th class='text-center'>评分IP</th>
+                <% } %>
+                <th class='text-center'>时间</th>
+                <% if (isAdmin) {%>
+                  <th class='text-center'>操作</th>
+                <% } %>
+              </tr>
+              </thead>
+              <tbody>
+              <% for(var i=0 ; i < votes.length; i++){ %>
+              <tr>
+                <td class='text-center'><%= i+1 %></td>
+                <td class='text-center'><%= votes[i].title %></td>
+                <!--<td class='text-center'><%= votes[i].author %></td>-->
+                <td class='text-center'><%= votes[i].voteScore %></td>
+                <% if (isAdmin) {%>
+                  <td class='text-center'><%= votes[i].voteIp %></td>
+                <% } %>
+                <td class='text-center'><%= votes[i].voteTime %></td>
+                <% if (isAdmin) {%>
+                  <td class='text-center'>
+                    <form method="POST" action="/show/<%= votes[i].voteId %>">
+                      <input type="hidden" name="titleId" value="<%= votes[i].Id %>">
+                      <button type="submit" name="submit" class="btn btn-danger btn-xs">删除</button>
+                    </form>
+                  </td>
+                <% } %>
+              </tr>
+              <% } %>
+              </tbody>
+            </table>
+          </div>
+        </div>
+
+      </div>
+
+      <div class="col-lg-4">
+        <div class="panel panel-info">
+          <div class="panel-heading">
+            <h3 class="panel-title">幻灯片展示</h3>
+          </div>
+          <div class="panel-body">
+            <% if (votes[0]){ %>
+              <img src="http://10.20.1.100/learning/<%= votes[0].author %>-<%= votes[0].title %>-1.png" class="img-responsive img-thumbnail" alt="">
+              <img src="http://10.20.1.100/learning/<%= votes[0].author %>-<%= votes[0].title %>-2.png" class="img-responsive img-thumbnail" alt="">
+              <img src="http://10.20.1.100/learning/<%= votes[0].author %>-<%= votes[0].title %>-3.png" class="img-responsive img-thumbnail" alt="">
+            <% } else { %>
+              <img src="/images/1.jpg" class="img-responsive img-thumbnail" alt="">
+              <img src="/images/2.jpg" class="img-responsive img-thumbnail" alt="">
+              <img src="/images/3.jpg" class="img-responsive img-thumbnail" alt="">
+            <% } %>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</body>
+</html>
