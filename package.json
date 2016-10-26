@@ -15,5 +15,7 @@
     "morgan": "^1.6.1",
     "mysql": "^2.11.1",
     "serve-favicon": "^2.3.0"
-  }
+  },
+  "author": "pengloo53",
+  "license": "ISC"
 }

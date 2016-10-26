@@ -3,15 +3,26 @@ var util = require('util');
 var router = express.Router();
 var db = require('../db/db.js');
 
+function displayAllMessage(res,info){
+  db.getAllMessage(function(errs,rows){
+    if(!errs){
+      res.render('index',{
+        title: '评分首页',
+        messages: rows,
+        info: info
+      })
+    }else{
+      res.render('error', {
+        message: errs.message,
+        error: errs
+      });
+    }
+  });
+}
+
 /* GET home page. */
 router.get('/', function(req, res, next) {
-  db.getAllMessage(function(errs,rows){
-    res.render('index',{
-      title: '评分首页',
-      messages: rows,
-      info: null
-    })
-  });
+  displayAllMessage(res,null);
 });
 
 /* GET show page */
@@ -96,61 +107,48 @@ router.post('/', function(req,res,next){
   var voteTime = year+'年'+month+'月'+day+'日 '+hour+':'+minute;
   var voteIp = req.ip.match(/\d+\.\d+\.\d+\.\d+/)?req.ip.match(/\d+\.\d+\.\d+\.\d+/):'127.0.0.1';
   console.log(titleId + ',' + voteIp + ','+ voteTime + ',' + voteScore);
-  db.isVote(titleId,voteIp,function(result){
-    console.log('------------------------isVote: ' + result);
-    if(util.isBoolean(result) && result){
-      db.addVote(titleId,voteIp,voteTime,voteScore,function(result){
-        console.log('---------vote: ' + result);
-        if(result == 'success'){
-          db.getAverage( titleId, function(errs,rows){
-            console.log(rows[0].average);
-            if(rows){
-              var average = rows[0].average;
-              db.updateAverage(titleId, average, function(result){
-                console.log('---------update average: ' + result);
-                if(result == 'success'){
-                  // res.redirect('/');
-                  db.getAllMessage( function(errs,rows){
-                    res.render('index',{
-                      title: '评分首页',
-                      messages: rows,
-                      info: '评分成功'
-                    })
-                  });
-                }else{
-                  res.render('error', {
-                    message: result,
-                    error: {}
-                  });
-                }
-              });
-            }
-          });
-        }else{
-          res.render('error', {
-            message: result,
-            error: {}
-          });
-        }
-      });
-    }else if(util.isBoolean(result) && !result){
-      db.getAllMessage(function(errs,rows){
-        res.render('index',{
-          title: '评分首页',
-          messages: rows,
-          info: '请不要重复评分'
-        })
-      });
-    }else{
-      db.getAllMessage(function(errs,rows){
-        res.render('index',{
-          title: '评分首页',
-          messages: rows,
-          info: result
-        })
-      });
-    }
-  })
+  if(voteScore){
+    db.isVote(titleId,voteIp,function(result){
+      console.log('------------------------isVote: ' + result);
+      if(util.isBoolean(result) && result){
+        db.addVote(titleId,voteIp,voteTime,voteScore,function(result){
+          console.log('---------vote: ' + result);
+          if(result == 'success'){
+            db.getAverage( titleId, function(errs,rows){
+              console.log(rows[0].average);
+              if(rows){
+                var average = rows[0].average;
+                db.updateAverage(titleId, average, function(result){
+                  console.log('---------update average: ' + result);
+                  if(result == 'success'){
+                    // res.redirect('/');
+                    displayAllMessage(res,'评分成功');
+                  }else{
+                    res.render('error', {
+                      message: result,
+                      error: {}
+                    });
+                  }
+                });
+              }
+            });
+          }else{
+            res.render('error', {
+              message: result,
+              error: {}
+            });
+          }
+        });
+      }else if(util.isBoolean(result) && !result){
+        displayAllMessage(res,'请不要重复评分');
+      }else{
+        displayAllMessage(res,result);
+      }
+    });
+  }else{
+    displayAllMessage(res,'请选择评分');
+  }
+
 
 });
 
