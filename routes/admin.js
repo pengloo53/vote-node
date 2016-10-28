@@ -1,6 +1,6 @@
 var express = require('express');
 var router = express.Router();
-var db = require('../db/db.js');
+var db = require('../db/vote.js');
 
 /* 登陆权限 */
 router.use(function (req, res, next) {

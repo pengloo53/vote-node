@@ -1,7 +1,7 @@
 var express = require('express');
 var util = require('util');
 var router = express.Router();
-var db = require('../db/db.js');
+var db = require('../db/vote.js');
 
 function displayAllMessage(res,info){
   db.getAllMessage(function(errs,rows){
